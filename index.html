@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عوالم عراق كرافت</title>
+  <link rel="icon" href="https://via.placeholder.com/32x32?text=AC" type="image/png">
+  <link rel="apple-touch-icon" href="https://via.placeholder.com/180x180?text=AC">
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    /* Global Resets & Typography */
+    :root {
+      --primary-green: #00ff7f;
+      --dark-bg-gradient: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      --dark-card-bg: rgba(34, 34, 34, 0.95);
+      --dark-overlay-bg: rgba(0, 0, 0, 0.9);
+      --text-color: #fff;
+      --light-gray-text: #bbb;
+      --border-radius-sm: 8px;
+      --border-radius-md: 15px;
+      --box-shadow-green-glow: 0 0 20px rgba(0, 255, 127, 0.7);
+      --transition-speed: 0.3s ease-in-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Tajawal', 'Roboto', sans-serif;
+      background: var(--dark-bg-gradient);
+      color: var(--text-color);
+      text-align: center;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      width: 100%;
+    }
+
+    .flex-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-effect {
+      backdrop-filter: blur(15px) brightness(85%);
+      background-color: rgba(34, 34, 34, 0.65);
+      border: 1px solid rgba(0, 255, 127, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 255, 127, 0.25);
+    }
+
+    .header {
+      display: none;
+    }
+
+    .welcome-box {
+      width: 90%;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 22px;
+      border-radius: var(--border-radius-md);
+      border: 4px solid var(--primary-green);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-green);
+      min-height: 90px;
+      box-shadow: var(--box-shadow-green-glow);
+      transition: all var(--transition-speed);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+      animation: pulseBorder 2.5s infinite alternate ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes pulseBorder {
+      from { border-color: var(--primary-green); box-shadow: 0 0 15px rgba(0, 255, 127, 0.6); }
+      to { border-color: rgba(0, 255, 127, 0.6); box-shadow: 0 0 25px rgba(0, 255, 127, 0.9); }
+    }
+
+    .search-section {
+      padding: 20px 25px;
+      background: rgba(32, 58, 67, 0.8);
+      border-radius: var(--border-radius-md);
+      margin: 25px auto;
+      max-width: 650px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .search-container {
+      display: flex;
+      gap: 12px;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .search-container input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid var(--primary-green);
+      border-radius: var(--border-radius-sm);
+      background-color: rgba(34, 34, 34, 0.95);
+      color: var(--text-color);
+      font-size: 18px;
+      outline: none;
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    }
+
+    .search-container input::placeholder {
+      color: var(--light-gray-text);
+      opacity: 0.9;
+    }
+
+    .search-container input:focus {
+      border-color: #32e16d;
+      box-shadow: 0 0 12px rgba(0, 255, 127, 0.8);
+    }
+
+    .search-container button {
+      padding: 14px 25px;
+      background-color: var(--primary-green);
+      color: #050505;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      font-size: 19px;
+      font-weight: bold;
+      transition: background-color var(--transition-speed), transform 0.2s ease, box-shadow var(--transition-speed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .search-container button:hover {
+      background-color: #32e16d;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 255, 127, 0.5);
+    }
+
+    .search-container button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .tabs-nav {
+      padding: 18px 25px;
+      margin: 25px auto;
+      max-width: 850px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      border-radius: var(--border-radius-md);
+      background: rgba(32, 58, 67, 0.8);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .tabs-nav button, .tabs-nav a.button-link { /* إضافة .button-link */
+      flex: 1;
+      min-width: 130px;
+      max-width: 200px;
+      padding: 14px 18px;
+      background-color: var(--dark-card-bg);
+      color: var(--text-color);
+      border: 2px solid var(--primary-green);
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: 700;
+      transition: background-color var(--transition-speed), color var(--transition-speed), transform 0.2s ease, box-shadow var(--transition-speed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none; /* إزالة الخط السفلي للروابط */
+    }
+
+    .tabs-nav button:hover,
+    .tabs-nav button.active,
+    .tabs-nav a.button-link:hover,
+    .tabs-nav a.button-link.active { /* Added .button-link.active */
+      background-color: var(--primary-green);
+      color: #050505;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(0, 255, 127, 0.5);
+    }
+
+    .tabs-nav button:active,
+    .tabs-nav a.button-link:active { /* إضافة .button-link:active */
+      transform: translateY(0);
+    }
+
+    .mods-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 25px;
+      justify-content: center;
+      margin: 0 auto;
+      max-width: 1200px;
+      flex-grow: 1;
+    }
+
+    .mod-card {
+      position: relative;
+      background-color: var(--dark-card-bg);
+      padding: 20px;
+      border: 2px solid var(--primary-green);
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mod-card:hover {
+      background-color: rgba(51, 51, 51, 0.95);
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: var(--box-shadow-green-glow);
+    }
+
+    .mod-number {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--primary-green);
+      color: #050505;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 5px 10px;
+      border-radius: var(--border-radius-sm);
+      z-index: 10;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .image-wrapper {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      border-radius: var(--border-radius-sm);
+      border: 1px solid rgba(0, 255, 127, 0.5);
+      background-color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mod-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .mod-card:hover .mod-image {
+      transform: scale(1.1);
+    }
+
+    .mod-details {
+      flex-grow: 1;
+      text-align: right;
+      margin-bottom: 12px;
+    }
+
+    .mod-name {
+      font-size: 20px;
+      color: var(--primary-green);
+      font-weight: 700;
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      direction: rtl;
+    }
+
+    .mod-version {
+      font-size: 15px;
+      color: var(--light-gray-text);
+      margin-bottom: 12px;
+      direction: rtl;
+    }
+
+    .download-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 90%;
+      margin: 12px auto 0;
+      padding: 12px;
+      background-color: #32e16d;
+      color: #050505;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background-color var(--transition-speed), transform 0.2s ease, box-shadow var(--transition-speed);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .download-btn i {
+      font-size: 20px;
+    }
+
+    .download-btn:hover {
+      background-color: #2ac75e;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+    }
+
+    .no-mods-message, .error-message {
+      font-size: 20px;
+      color: var(--light-gray-text);
+      margin-top: 40px;
+      padding: 20px;
+      background-color: rgba(34, 34, 34, 0.7);
+      border-radius: var(--border-radius-md);
+      border: 2px solid rgba(0, 255, 127, 0.5);
+      max-width: 600px;
+      margin: 40px auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .error-message {
+      color: #ff6347;
+      border-color: #ff6347;
+    }
+
+    .loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--dark-overlay-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .loader-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader {
+      border: 10px solid rgba(243, 243, 243, 0.2);
+      border-top: 10px solid var(--primary-green);
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 20px rgba(0, 255, 127, 0.8);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .footer {
+      background: rgba(15, 32, 39, 0.95);
+      padding: 25px 0;
+      margin-top: 40px;
+      border-top: 3px solid var(--primary-green);
+      box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.4);
+      color: var(--light-gray-text);
+      font-size: 16px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--primary-green);
+      text-decoration: none;
+      margin: 0 12px;
+      transition: color var(--transition-speed), text-shadow var(--transition-speed);
+    }
+
+    .footer-links a:hover {
+      color: #32e16d;
+      text-decoration: underline;
+      text-shadow: 0 0 5px rgba(0, 255, 127, 0.5);
+    }
+
+    .social-icons a {
+      color: var(--text-color);
+      font-size: 26px;
+      margin: 0 12px;
+      transition: color var(--transition-speed), transform 0.2s ease;
+    }
+
+    .social-icons a:hover {
+      color: var(--primary-green);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 380px) {
+      .header-content { padding: 0 10px; }
+      .logo img { height: 30px; }
+      .logo-text { font-size: 18px; letter-spacing: 0.5px; }
+      .welcome-box { font-size: 14px; padding: 10px; min-height: 70px; }
+      .search-container input { font-size: 14px; padding: 10px 12px; }
+      .search-container button { font-size: 14px; padding: 10px 15px; gap: 4px; }
+      .tabs-nav { gap: 8px; padding: 10px; }
+      .tabs-nav button, .tabs-nav a.button-link { font-size: 13px; padding: 10px; gap: 6px; min-width: unset; flex-basis: 48%; }
+      .mods-grid { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
+      .mod-card { padding: 10px; }
+      .mod-number { font-size: 11px; padding: 3px 6px; top: 8px; left: 8px; }
+      .image-wrapper { height: 120px; margin-bottom: 8px; }
+      .mod-name { font-size: 15px; margin-bottom: 4px; }
+      .mod-version { font-size: 12px; margin-bottom: 8px; }
+      .download-btn { font-size: 13px; padding: 8px; gap: 6px; }
+      .download-btn i { font-size: 16px; }
+      .footer { padding: 15px 0; font-size: 13px; }
+      .footer-links a, .social-icons a { font-size: 20px; margin: 0 8px; }
+      .no-mods-message, .error-message { font-size: 16px; padding: 15px; }
+    }
+
+    @media (min-width: 381px) and (max-width: 600px) {
+      .header-content { padding: 0 15px; }
+      .logo img { height: 40px; }
+      .logo-text { font-size: 24px; }
+      .welcome-box { font-size: 16px; padding: 15px; min-height: 80px; }
+      .search-container input { font-size: 15px; padding: 12px 15px; }
+      .search-container button { font-size: 15px; padding: 12px 18px; }
+      .tabs-nav { gap: 10px; padding: 15px; }
+      .tabs-nav button, .tabs-nav a.button-link { font-size: 14px; padding: 12px; min-width: unset; flex-basis: 48%; }
+      .mods-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding: 15px; }
+      .mod-card { padding: 12px; }
+      .mod-number { font-size: 12px; padding: 4px 8px; }
+      .image-wrapper { height: 140px; margin-bottom: 10px; }
+      .mod-name { font-size: 16px; margin-bottom: 6px; }
+      .mod-version { font-size: 13px; margin-bottom: 10px; }
+      .download-btn { font-size: 14px; padding: 9px; }
+      .download-btn i { font-size: 18px; }
+      .footer { padding: 20px 0; font-size: 14px; }
+      .footer-links a, .social-icons a { font-size: 22px; margin: 0 10px; }
+      .no-mods-message, .error-message { font-size: 18px; padding: 18px; }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+      .header-content { padding: 0 20px; }
+      .logo img { height: 45px; }
+      .logo-text { font-size: 28px; }
+      .welcome-box { font-size: 20px; padding: 20px; min-height: 85px; }
+      .search-container input { font-size: 17px; padding: 13px 16px; }
+      .search-container button { font-size: 17px; padding: 13px 22px; }
+      .tabs-nav { gap: 12px; padding: 15px 20px; }
+      .tabs-nav button, .tabs-nav a.button-link { font-size: 16px; padding: 13px 16px; min-width: 110px; }
+      .mods-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 20px; }
+      .mod-card { padding: 18px; }
+      .mod-number { font-size: 13px; padding: 4px 9px; }
+      .image-wrapper { height: 160px; margin-bottom: 12px; }
+      .mod-name { font-size: 18px; margin-bottom: 7px; }
+      .mod-version { font-size: 14px; margin-bottom: 11px; }
+      .download-btn { font-size: 16px; padding: 11px; }
+      .download-btn i { font-size: 19px; }
+      .footer { padding: 22px 0; font-size: 15px; }
+      .footer-links a, .social-icons a { font-size: 24px; margin: 0 10px; }
+      .no-mods-message, .error-message { font-size: 19px; padding: 20px; }
+    }
+
+    @media (min-width: 901px) {
+      /* No changes needed here */
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics-compat.js" defer></script>
+</head>
+<body>
+
+  <div id="loader" class="loader-overlay flex-center">
+    <div class="loader"></div>
+    <p class="sr-only">جاري تحميل المحتوى...</p>
+  </div>
+
+  <header class="header">
+    <div class="container header-content">
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="welcome-section">
+      <div class="welcome-box glass-effect" id="welcomeBox">
+        <span class="sr-only">رسالة ترحيبية:</span>
+        أهلاً وسهلاً بكم في تطبيق عراق كرافت، التطبيق العراقي للمودات في ماين كرافت!
+      </div>
+    </section>
+
+    <section class="search-section glass-effect">
+      <h2 class="sr-only">قسم البحث</h2>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="ابحث عن مود أو رقم..." aria-label="حقل البحث عن المودات">
+        <button id="searchBtn" aria-label="زر البحث">
+          <i class="fas fa-search"></i>
+          <span>بحث</span>
+        </button>
+      </div>
+    </section>
+
+    <nav class="tabs-nav glass-effect" aria-label="فئات المودات">
+      <a href="go:Mod1" class="button-link active" id="tabMods" data-category="mods">
+        <i class="fas fa-hammer"></i>
+        <span>مودات</span>
+      </a>
+      <a href="peg.3.html" class="button-link" id="tabResourcePacks">
+        <i class="fas fa-box-open"></i>
+        <span>ريسورس باك</span>
+      </a>
+      <a href="peg.1.html" class="button-link" id="tabWorlds">
+        <i class="fas fa-globe"></i>
+        <span>عوالم</span>
+      </a>
+      <a href="peg.2.html" class="button-link" id="tabVersions">
+        <i class="fas fa-robot"></i>
+        <span>قنوات</span>
+      </a>
+    </nav>
+
+    <section class="mods-grid" id="modsContainer" aria-live="polite">
+      </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>2025©  جميع الحقوق محفوظة. لدى منصة عراق كرافت</p>
+      <div class="footer-links">
+        </div>
+      <div class="social-icons">
+        <a href="https://www.tiktok.com/@HKOMHSF" target="_blank" rel="noopener noreferrer" aria-label="حسابنا على تيك توك">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://t.me/HKOMHSF" target="_blank" rel="noopener noreferrer" aria-label="قناتنا على تليجرام">
+          <i class="fab fa-telegram-plane"></i>
+        </a>
+        <a href="https://www.youtube.com/@hkomhsf" target="_blank" rel="noopener noreferrer" aria-label="قناتنا على يوتيوب">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const firebaseConfig = {
+    apiKey: "AIzaSyBmvJQp14pjEb_VOpSjsATLro4hk6oIB6M",
+  authDomain: "reso80.firebaseapp.com",
+  projectId: "reso80",
+  storageBucket: "reso80.firebasestorage.app",
+  messagingSenderId: "392890635009",
+  appId: "1:392890635009:web:abd6cf9636da139806c100",
+  measurementId: "G-BH1CCQS8ZN"
+        };
+
+        let db;
+
+        try {
+          if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            if (firebase.analytics) {
+              firebase.analytics();
+            }
+          }
+          db = firebase.database();
+        } catch (e) {
+          console.error("فشل تهيئة Firebase:", e);
+          document.getElementById('loader')?.classList.add('hidden');
+          document.getElementById('modsContainer').innerHTML = "<p class='error-message'>تعذر تحميل التطبيق. يرجى التحقق من اتصالك بالإنترنت وتكوين Firebase.</p>";
+          return;
+        }
+
+        const welcomeBox = document.getElementById('welcomeBox');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const modsContainer = document.getElementById('modsContainer');
+        const loader = document.getElementById('loader');
+        const tabModsButton = document.getElementById('tabMods'); 
+        const allTabButtons = document.querySelectorAll('.tabs-nav button, .tabs-nav a.button-link'); // Select all tab buttons/links
+
+        let allModsData = []; 
+
+        const welcomeMessages = [
+          "أهلاً وسهلاً بكم في تطبيق عراق كرافت، التطبيق العراقي للمودات في ماين كرافت!",
+          "تابعنا على تيك توك: HKOMHSF",
+          "انضم إلى قناتنا على تليجرام: HKOMHSF",
+          "شاهد شروحات التركيب على يوتيوب: حكومة SF"
+        ];
+        let welcomeMessageIndex = 0; 
+        const startWelcomeMessageRotation = () => {
+          setInterval(() => {
+            welcomeMessageIndex = (welcomeMessageIndex + 1) % welcomeMessages.length;
+            welcomeBox.textContent = welcomeMessages[welcomeMessageIndex];
+          }, 5000);
+        };
+        startWelcomeMessageRotation();
+
+
+        const applyFiltersAndSearch = () => {
+          const query = searchInput.value.trim().toLowerCase();
+          // The active category for filtering is now determined by the currently active tab if needed,
+          // but since "مودات" is now a link and defaults to 'mods', we can keep it as 'mods' for the content display.
+          const activeCategory = 'mods'; 
+
+          let filteredMods = allModsData.filter(mod => {
+            return mod.category === activeCategory;
+          });
+
+          // نطبق البحث على المودات المفلترة
+          const finalFilteredMods = filteredMods.filter(mod => {
+            const name = mod.name?.toLowerCase() || '';
+            // البحث عن طريق الرقم المخزن في Firebase
+            const number = mod.number !== null && mod.number !== undefined ? String(mod.number).toLowerCase() : '';
+            return name.includes(query) || number.includes(query) || query === "";
+          });
+
+          displayMods(finalFilteredMods);
+        };
+
+        searchBtn.addEventListener("click", applyFiltersAndSearch);
+        searchInput.addEventListener("input", applyFiltersAndSearch);
+
+        // This listener will handle adding the 'active' class to the clicked tab/link.
+        // The navigation for 'go:A' is handled directly by the href attribute on the <a> tag.
+        allTabButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                allTabButtons.forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+                // If the clicked tab is 'Mods', re-apply the filter to show 'mods' category
+                // This ensures the display remains consistent even if a link changes the URL
+                if (event.currentTarget.id === 'tabMods') {
+                    applyFiltersAndSearch(); 
+                }
+            });
+        });
+
+        // Ensure "مودات" tab is active on initial load
+        tabModsButton.classList.add('active');
+
+        // *** دالة جديدة لإضافة مود برقم تسلسلي تلقائي (مثال توضيحي) ***
+        // هذه الدالة لا يتم استدعاؤها تلقائياً في التطبيق، ولكنها توضح كيفية إضافة مود جديد
+        // مع توليد رقم تسلسلي وحفظه في Firebase.
+        async function addModWithAutoNumber(modDetails) {
+            try {
+                // جلب جميع المودات للعثور على أكبر رقم موجود
+                const snapshot = await db.ref("mods").once("value");
+                const modsObject = snapshot.val();
+                let maxNumber = 0;
+
+                if (modsObject) {
+                    Object.values(modsObject).forEach(mod => {
+                        if (typeof mod.number === 'number' && !isNaN(mod.number)) {
+                            maxNumber = Math.max(maxNumber, mod.number);
+                        }
+                    });
+                }
+                
+                const newModNumber = maxNumber + 1;
+                
+                // إضافة الرقم الجديد إلى تفاصيل المود
+                const newModData = { ...modDetails, number: newModNumber };
+
+                // إضافة المود إلى Firebase
+                const newModRef = db.ref("mods").push();
+                await newModRef.set(newModData);
+                console.log(`تم إضافة المود بنجاح بالرقم: ${newModNumber}`);
+                fetchMods(); // إعادة جلب وعرض المودات بعد الإضافة
+            } catch (error) {
+                console.error("خطأ في إضافة المود:", error);
+            }
+        }
+
+        // مثال على كيفية استدعاء addModWithAutoNumber (يمكنك تشغيله من الكونسول لتجربة)
+        // addModWithAutoNumber({
+        //     name: "مود رعب جديد",
+        //     version: "1.20.1",
+        //     image: "https://via.placeholder.com/280x180?text=New+Horror+Mod",
+        //     link: "https://example.com/new-horror-mod.mcpack",
+        //     category: "mods"
+        // });
+
+
+        // جلب المودات من Firebase
+        const fetchMods = async () => {
+          loader.classList.remove('hidden');
+
+          try {
+            const snapshot = await db.ref("mods").once("value");
+
+            if (!snapshot.exists()) {
+              modsContainer.innerHTML = "<p class='no-mods-message'>لا توجد مودات حالياً. يرجى التحقق لاحقاً!</p>";
+              allModsData = [];
+              return;
+            }
+
+            const modsObject = snapshot.val();
+            const loadedMods = [];
+
+            Object.keys(modsObject).forEach(key => {
+                const modData = modsObject[key];
+                // التأكد من أن modData.number رقم صالح، وإلا يتم تعيينه إلى null
+                const modNumber = typeof modData.number === 'number' && !isNaN(modData.number) ? modData.number : null;
+
+                if (typeof modData === 'object' && modData !== null && modData.name && modData.link && modData.image && modData.version) {
+                    loadedMods.push({
+                        id: key,
+                        name: modData.name,
+                        version: modData.version,
+                        image: modData.image,
+                        link: modData.link,
+                        number: modNumber, // استخدام الرقم الذي تم التحقق منه
+                        category: modData.category || 'mods' 
+                    });
+                } else {
+                    console.warn(`تخطي بيانات مود غير صالحة تحت المفتاح: ${key}`, modData);
+                }
+            });
+
+            // فرز المودات بناءً على حقل 'number'
+            // المودات التي ليس لها رقم (null) ستوضع في النهاية
+            loadedMods.sort((a, b) => {
+                // إذا كان أي من الرقمين null، فتعامله على أنه لا نهاية (ليتم وضعه في النهاية)
+                const numA = a.number === null ? Infinity : a.number;
+                const numB = b.number === null ? Infinity : b.number;
+                return numA - numB;
+            });
+
+            allModsData = loadedMods; 
+            applyFiltersAndSearch(); 
+
+          } catch (error) {
+            console.error("خطأ في جلب المودات من Firebase:", error);
+            modsContainer.innerHTML = `<p class='error-message'>حدث خطأ أثناء تحميل المودات: ${error.message}. يرجى المحاولة مرة أخرى.</p>`;
+          } finally {
+            loader.classList.add('hidden');
+          }
+        };
+
+        // وظيفة عرض المودات
+        const displayMods = (modsToDisplay) => {
+          modsContainer.innerHTML = '';
+
+          if (modsToDisplay.length === 0) {
+            modsContainer.innerHTML = "<p class='no-mods-message'>لا توجد مودات مطابقة لمعايير البحث في هذه الفئة.</p>";
+            return;
+          }
+
+          modsToDisplay.forEach((mod) => { 
+            const modDiv = document.createElement("div");
+            modDiv.className = "mod-card glass-effect";
+            modDiv.setAttribute("data-name", mod.name || '');
+            modDiv.setAttribute("data-version", mod.version || '');
+            // تأكد من أن الرقم المخزن في Firebase هو الذي يتم استخدامه للعرض وللبحث
+            modDiv.setAttribute("data-number", String(mod.number !== null ? mod.number : '')); 
+
+            const imageUrl = mod.image && mod.image.startsWith('http') ? mod.image : 'https://via.placeholder.com/280x180?text=No+Image';
+            const downloadLink = mod.link && mod.link.startsWith('http') ? mod.link : '#';
+            const isDownloadable = downloadLink !== '#';
+
+            modDiv.innerHTML = `
+              <div class="mod-number">#${mod.number !== null ? mod.number : 'N/A (تحديث رقم المود)'}</div> 
+              <div class="image-wrapper">
+                <img class="mod-image" src="${imageUrl}" alt="${mod.name || 'صورة المود'}" loading="lazy">
+              </div>
+              <div class="mod-details">
+                <h3 class="mod-name" title="${mod.name || 'اسم المود غير متوفر'}">${mod.name || 'اسم المود غير متوفر'}</h3>
+                <p class="mod-version">الإصدار: ${mod.version || 'غير محدد'}</p>
+              </div>
+              <a href="${downloadLink}" target="_blank" rel="noopener noreferrer" class="download-btn" ${!isDownloadable ? 'aria-disabled="true" title="رابط التحميل غير متوفر" style="opacity: 0.6; cursor: not-allowed;"' : ''} >
+                <i class="fas fa-download"></i>
+                <span>${isDownloadable ? 'تحميل المود' : 'لا يوجد رابط'}</span>
+              </a>
+            `;
+            modsContainer.appendChild(modDiv);
+          });
+        };
+
+        fetchMods();
+    });
+  </script>
+</body>
+</html>

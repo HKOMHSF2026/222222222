@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة المودات</title>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif; /* استخدام خط أفضل للعربية */
+      background-color: #1a1a1a; /* خلفية أغمق */
+      color: #e0e0e0; /* لون نص فاتح */
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .mod {
+      background: #2a2a2a; /* خلفية المود أغمق قليلاً */
+      border: 1px solid #00ff7f; /* إطار أخضر مميز */
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* ظل خفيف */
+    }
+
+    .mod img {
+      width: 150px; /* حجم أكبر للصورة */
+      height: 100px; /* ارتفاع ثابت */
+      object-fit: cover; /* لضمان تغطية الصورة للمساحة */
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid rgba(0, 255, 127, 0.4);
+    }
+
+    input[type="text"],
+    input[type="number"] { /* تحديد النوع لحقول النص والرقم */
+      width: calc(100% - 10px); /* عرض مع هامش صغير */
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #00ff7f; /* إطار أخضر */
+      background-color: #333; /* خلفية حقل الإدخال */
+      color: #fff;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #32e16d;
+      box-shadow: 0 0 8px rgba(0, 255, 127, 0.5);
+      outline: none;
+    }
+
+    button {
+      margin: 8px; /* هامش أكبر للأزرار */
+      padding: 10px 20px; /* حجم أكبر للأزرار */
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      font-weight: bold;
+    }
+
+    .approve-btn {
+      background-color: #00ff7f;
+      color: #1a1a1a; /* لون نص داكن */
+    }
+    .approve-btn:hover {
+      background-color: #32e16d;
+      transform: translateY(-2px);
+    }
+
+    .delete-btn {
+      background-color: #ff4747; /* أحمر أكثر وضوحاً */
+      color: white;
+    }
+    .delete-btn:hover {
+      background-color: #e03030;
+      transform: translateY(-2px);
+    }
+
+    .update-btn {
+      background-color: #ffbb00; /* برتقالي */
+      color: #1a1a1a;
+    }
+    .update-btn:hover {
+      background-color: #e0a000;
+      transform: translateY(-2px);
+    }
+
+    .section-title {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #00ff7f;
+      text-align: center;
+      border-bottom: 2px solid rgba(0, 255, 127, 0.5);
+      padding-bottom: 10px;
+    }
+
+    #searchInput {
+      width: calc(100% - 40px); /* لتتناسب مع الهوامش */
+      max-width: 500px; /* حد أقصى لعرض حقل البحث */
+      margin: 20px auto; /* توسيط حقل البحث */
+      display: block; /* ليكون في سطر خاص به */
+    }
+
+    /* تحسينات للخطوط */
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+    body {
+        font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <h2 class="section-title">مودات قيد المراجعة</h2>
+  <div id="pendingContainer"></div>
+
+  <h2 class="section-title">المودات المقبولة</h2>
+  <input type="text" id="searchInput" placeholder="ابحث باسم المود أو رقمه..." oninput="loadApprovedMods()">
+  <div id="approvedContainer"></div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHGM2LyFNd4e9etpPPecv6-7yPl6WUjpc",
+      authDomain: "hkomhsf-73eb1.firebaseapp.com",
+      databaseURL: "https://mod80-99931-default-rtdb.firebaseio.com",
+      projectId: "mod80-99931",
+      storageBucket: "mod80-99931.firebasestorage.app",
+      messagingSenderId: "68372905453",
+      appId: "1:68372905453:web:f097dca1b63adf5ef5fbe4",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // --- سكريبت تشغيل لمرة واحدة لترقيم المودات الموجودة حالياً في Firebase ---
+    // هام جداً:
+    // 1. عند فتح ملف HTML هذا في متصفحك للمرة الأولى (بعد لصق هذا الكود):
+    //    هذه الدالة ستُشغّل تلقائياً.
+    // 2. ستظهر لك رسالة تأكيد "تم ترقيم المودات الموجودة بنجاح!".
+    // 3. **بعد ظهور الرسالة وتأكدك من ترقيم المودات في "المودات المقبولة":**
+    //    قم بـ **إعادة التعليق** على السطر `assignNumbersToExistingMods();`
+    //    ليصبح `// assignNumbersToExistingMods();` ثم احفظ الملف.
+    //    هذه الدالة يجب أن تُشغل مرة واحدة فقط لتجهيز البيانات القديمة.
+    async function assignNumbersToExistingMods() {
+        console.log("بدء عملية ترقيم المودات الموجودة...");
+        try {
+            const snapshot = await db.ref("mods").orderByChild("timestamp").once("value");
+            const updates = {};
+            let currentNumber = 1;
+
+            if (snapshot.exists()) {
+                snapshot.forEach(child => {
+                    const mod = child.val();
+                    // ترقيم فقط المودات التي ليس لها رقم أو رقمها غير صالح
+                    if (typeof mod.number !== 'number' || isNaN(mod.number) || mod.number === null) {
+                        updates[`/mods/${child.key}/number`] = currentNumber;
+                        console.log(`تعيين رقم ${currentNumber} للمود: ${mod.name}`);
+                        currentNumber++;
+                    } else {
+                        // إذا كان المود لديه رقم بالفعل، نضمن أن الترقيم الجديد يبدأ بعد أكبر رقم موجود
+                        if (mod.number >= currentNumber) {
+                            currentNumber = mod.number + 1;
+                        }
+                    }
+                });
+            }
+
+            if (Object.keys(updates).length > 0) {
+                await db.ref().update(updates);
+                console.log("تم تحديث الأرقام بنجاح لجميع المودات التي لم يكن لها رقم.");
+                alert("تم ترقيم المودات الموجودة بنجاح! يرجى تحديث الصفحة.");
+                loadApprovedMods(); // لإعادة تحميل وعرض المودات بالأرقام الجديدة
+            } else {
+                console.log("جميع المودات الموجودة لديها أرقام بالفعل. لا يوجد شيء للتحديث.");
+                alert("جميع المودات الموجودة لديها أرقام بالفعل. لا يوجد شيء للتحديث.");
+            }
+
+        } catch (error) {
+            console.error("خطأ في ترقيم المودات الموجودة:", error);
+            alert("حدث خطأ أثناء ترقيم المودات: " + error.message);
+        }
+    }
+
+    // *** هذا السطر سيقوم بتشغيل الدالة لمرة واحدة عند تحميل الصفحة ***
+    // لا تنسَ إعادة تعليقه بعد التأكد من عمله!
+    assignNumbersToExistingMods(); 
+
+
+    // --- وظائف المودات قيد المراجعة ---
+    function loadPendingMods() {
+      const container = document.getElementById("pendingContainer");
+      container.innerHTML = "";
+
+      db.ref("pending_mods").orderByChild("timestamp").once("value", snapshot => {
+        if (!snapshot.exists()) {
+          container.innerHTML = "<p style='text-align: center; color: #bbb;'>لا توجد مودات قيد المراجعة حالياً.</p>";
+          return;
+        }
+        let index = 1; // رقم تسلسلي للعرض فقط في قسم "قيد المراجعة"
+        snapshot.forEach(child => {
+          const mod = child.val();
+          const div = document.createElement("div");
+          div.className = "mod";
+          div.innerHTML = `
+            <h3>المود #${index++}</h3> <label>الاسم:</label>
+            <input type="text" id="name-pending-${mod.id}" value="${mod.name || ''}">
+            <label>الرابط:</label>
+            <input type="text" id="link-pending-${mod.id}" value="${mod.link || ''}">
+            <label>الإصدار:</label>
+            <input type="text" id="version-pending-${mod.id}" value="${mod.version || ''}">
+            <label>صورة الرابط:</label>
+            <input type="text" id="image-pending-${mod.id}" value="${mod.image || ''}">
+            <img src="${mod.image || 'https://via.placeholder.com/150x100?text=No+Image'}" alt="صورة المود">
+            <br>
+            <button class="approve-btn" onclick="approveMod('${mod.id}')">موافقة</button>
+            <button class="delete-btn" onclick="deleteMod('${mod.id}')">حذف</button>
+          `;
+          container.appendChild(div);
+        });
+      }, error => {
+        console.error("Error loading pending mods:", error);
+        container.innerHTML = "<p style='text-align: center; color: red;'>حدث خطأ أثناء تحميل المودات قيد المراجعة.</p>";
+      });
+    }
+
+    async function approveMod(id) {
+      const name = document.getElementById(`name-pending-${id}`).value.trim();
+      const link = document.getElementById(`link-pending-${id}`).value.trim();
+      const version = document.getElementById(`version-pending-${id}`).value.trim();
+      const image = document.getElementById(`image-pending-${id}`).value.trim();
+
+      if (!name || !link || !version || !image) {
+        alert("الرجاء تعبئة جميع الحقول قبل الموافقة.");
+        return;
+      }
+
+      try {
+        // 1. جلب أكبر رقم موجود في المودات الموافق عليها
+        const modsSnapshot = await db.ref("mods").orderByChild("number").limitToLast(1).once("value");
+        let nextModNumber = 1;
+        if (modsSnapshot.exists()) {
+            modsSnapshot.forEach(child => {
+                const modData = child.val();
+                if (typeof modData.number === 'number' && !isNaN(modData.number)) {
+                    nextModNumber = modData.number + 1;
+                }
+            });
+        }
+        
+        // 2. إنشاء بيانات المود الموافق عليه مع الرقم الجديد
+        const approvedMod = {
+          id,
+          name,
+          image,
+          link,
+          version,
+          number: nextModNumber, // حفظ الرقم التسلسلي هنا
+          timestamp: Date.now() // timestamp for sorting by approval time
+        };
+
+        // 3. حفظ المود في قسم "mods" (المودات المقبولة)
+        await db.ref("mods/" + id).set(approvedMod);
+
+        // 4. حذف المود من قسم "pendingMods" (المودات قيد المراجعة)
+        await db.ref("pending_mods/" + id).remove();
+
+        alert("تمت الموافقة على المود بنجاح وتم تعيين الرقم: " + nextModNumber);
+        loadPendingMods();
+        loadApprovedMods();
+
+      } catch (error) {
+        console.error("Error approving mod:", error);
+        alert("حدث خطأ أثناء الموافقة على المود: " + error.message);
+      }
+    }
+
+    function deleteMod(id) {
+      if (!confirm("هل أنت متأكد أنك تريد حذف هذا المود نهائيًا من قائمة قيد المراجعة؟")) return;
+      db.ref("pending_mods/" + id).remove().then(() => {
+        alert("تم الحذف بنجاح من المودات قيد المراجعة.");
+        loadPendingMods();
+      }).catch(error => {
+        console.error("Error deleting pending mod:", error);
+        alert("حدث خطأ أثناء حذف المود من قائمة قيد المراجعة: " + error.message);
+      });
+    }
+
+    // --- وظائف المودات المقبولة ---
+    function loadApprovedMods() {
+      const container = document.getElementById("approvedContainer");
+      container.innerHTML = "";
+
+      const searchValue = document.getElementById("searchInput")?.value?.trim().toLowerCase() || "";
+
+      // جلب المودات مرتبة حسب الرقم (الأقل إلى الأعلى)
+      db.ref("mods").orderByChild("number").once("value", snapshot => {
+        if (!snapshot.exists()) {
+          container.innerHTML = "<p style='text-align: center; color: #bbb;'>لا توجد مودات مقبولة حالياً.</p>";
+          return;
+        }
+
+        let filteredMods = [];
+        snapshot.forEach(child => {
+          const mod = child.val();
+          // التأكد من أن الرقم موجود وصالح
+          const modNumber = typeof mod.number === 'number' && !isNaN(mod.number) ? mod.number : 'N/A';
+
+          // البحث بالاسم أو بالرقم
+          const matchesSearch = mod.name?.toLowerCase().includes(searchValue) || 
+                               (modNumber !== 'N/A' && String(modNumber).includes(searchValue));
+
+          if (matchesSearch) {
+            filteredMods.push({ id: child.key, ...mod, number: modNumber });
+          }
+        });
+
+        // نعيد عرض المودات المفلترة
+        filteredMods.forEach(mod => {
+          const div = document.createElement("div");
+          div.className = "mod";
+          div.innerHTML = `
+            <h3>المود #${mod.number}</h3> <label>الاسم:</label>
+            <input type="text" id="name-approved-${mod.id}" value="${mod.name || ''}">
+            <label>الرقم:</label>
+            <input type="number" id="number-approved-${mod.id}" value="${mod.number !== 'N/A' ? mod.number : ''}" placeholder="أدخل رقم المود">
+            <label>الرابط:</label>
+            <input type="text" id="link-approved-${mod.id}" value="${mod.link || ''}">
+            <label>الإصدار:</label>
+            <input type="text" id="version-approved-${mod.id}" value="${mod.version || ''}">
+            <label>صورة الرابط:</label>
+            <input type="text" id="image-approved-${mod.id}" value="${mod.image || ''}">
+            <img src="${mod.image || 'https://via.placeholder.com/150x100?text=No+Image'}" alt="صورة المود">
+            <br>
+            <button class="update-btn" onclick="updateMod('${mod.id}')">تعديل</button>
+            <button class="delete-btn" onclick="deleteApprovedMod('${mod.id}')">حذف</button>
+          `;
+          container.appendChild(div);
+        });
+
+        if (filteredMods.length === 0 && searchValue !== "") {
+          container.innerHTML = "<p style='text-align: center; color: #bbb;'>لا توجد مودات مطابقة لمعايير البحث.</p>";
+        } else if (filteredMods.length === 0) {
+           container.innerHTML = "<p style='text-align: center; color: #bbb;'>لا توجد مودات مقبولة حالياً.</p>";
+        }
+
+      }, error => {
+        console.error("Error loading approved mods:", error);
+        container.innerHTML = "<p style='text-align: center; color: red;'>حدث خطأ أثناء تحميل المودات المقبولة.</p>";
+      });
+    }
+
+    function updateMod(id) {
+      const name = document.getElementById(`name-approved-${id}`).value.trim();
+      const link = document.getElementById(`link-approved-${id}`).value.trim();
+      const version = document.getElementById(`version-approved-${id}`).value.trim();
+      const image = document.getElementById(`image-approved-${id}`).value.trim();
+      const numberInput = document.getElementById(`number-approved-${id}`).value.trim();
+      
+      const newNumber = parseInt(numberInput, 10);
+
+      if (!name || !link || !version || !image) {
+        alert("الرجاء تعبئة جميع الحقول قبل التعديل.");
+        return;
+      }
+      if (isNaN(newNumber) || newNumber <= 0) {
+          alert("الرجاء إدخال رقم مود صحيح (أكبر من 0).");
+          return;
+      }
+
+
+      db.ref("mods/" + id).update({
+        name,
+        link,
+        version,
+        image,
+        number: newNumber // تحديث الرقم أيضاً
+      }).then(() => {
+        alert("تم التحديث بنجاح.");
+        loadApprovedMods(); // إعادة تحميل المودات بعد التحديث ليعكس الترتيب الجديد
+      }).catch(error => {
+        console.error("Error updating mod:", error);
+        alert("حدث خطأ أثناء تحديث المود: " + error.message);
+      });
+    }
+
+    function deleteApprovedMod(id) {
+      if (!confirm("هل أنت متأكد أنك تريد حذف هذا المود نهائيًا من قائمة المودات المقبولة؟")) return;
+      db.ref("mods/" + id).remove().then(() => {
+        alert("تم الحذف بنجاح من المودات المقبولة.");
+        loadApprovedMods();
+      }).catch(error => {
+        console.error("Error deleting approved mod:", error);
+        alert("حدث خطأ أثناء حذف المود من قائمة المودات المقبولة: " + error.message);
+      });
+    }
+
+    window.onload = () => {
+      loadPendingMods();
+      loadApprovedMods();
+    };
+  </script>
+</body>
+</html>
