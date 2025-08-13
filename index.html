@@ -1,834 +1,1068 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عوالم عراق كرافت</title>
-  <link rel="icon" href="https://via.placeholder.com/32x32?text=AC" type="image/png">
-  <link rel="apple-touch-icon" href="https://via.placeholder.com/180x180?text=AC">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واجهة تطبيق عراق كرافت</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --accent-color: #00ff7f;
+            --accent-secondary: #ff6b6b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --border-radius: 20px;
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        }
 
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        body {
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            color: var(--text-primary);
+            text-align: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-  <style>
-    /* Global Resets & Typography */
-    :root {
-      --primary-green: #00ff7f;
-      --dark-bg-gradient: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      --dark-card-bg: rgba(34, 34, 34, 0.95);
-      --dark-overlay-bg: rgba(0, 0, 0, 0.9);
-      --text-color: #fff;
-      --light-gray-text: #bbb;
-      --border-radius-sm: 8px;
-      --border-radius-md: 15px;
-      --box-shadow-green-glow: 0 0 20px rgba(0, 255, 127, 0.7);
-      --transition-speed: 0.3s ease-in-out;
-    }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 127, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        .app-container {
+            max-width: 430px; 
+            width: 100%;
+            margin: 0 auto; 
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
 
-    html {
-      scroll-behavior: smooth;
-    }
+        /* شريط الحالة */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--glass-shadow);
+        }
 
-    body {
-      font-family: 'Tajawal', 'Roboto', sans-serif;
-      background: var(--dark-bg-gradient);
-      color: var(--text-color);
-      text-align: center;
-      line-height: 1.7;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
+        .time {
+            font-weight: 700;
+        }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
-    }
+        .battery-wifi {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      width: 100%;
-    }
+        /* الشريط العلوي المطور */
+        .top-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .flex-center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .top-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
 
-    .glass-effect {
-      backdrop-filter: blur(15px) brightness(85%);
-      background-color: rgba(34, 34, 34, 0.65);
-      border: 1px solid rgba(0, 255, 127, 0.4);
-      box-shadow: 0 6px 20px rgba(0, 255, 127, 0.25);
-    }
+        .top-bar:hover::before {
+            left: 100%;
+        }
 
-    .header {
-      display: none;
-    }
+        .top-bar .icon {
+            position: relative;
+            padding: 12px;
+            border-radius: 15px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
 
-    .welcome-box {
-      width: 90%;
-      max-width: 500px;
-      margin: 30px auto;
-      padding: 22px;
-      border-radius: var(--border-radius-md);
-      border: 4px solid var(--primary-green);
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--primary-green);
-      min-height: 90px;
-      box-shadow: var(--box-shadow-green-glow);
-      transition: all var(--transition-speed);
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-      animation: pulseBorder 2.5s infinite alternate ease-in-out;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .top-bar .icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
 
-    @keyframes pulseBorder {
-      from { border-color: var(--primary-green); box-shadow: 0 0 15px rgba(0, 255, 127, 0.6); }
-      to { border-color: rgba(0, 255, 127, 0.6); box-shadow: 0 0 25px rgba(0, 255, 127, 0.9); }
-    }
+        .top-bar .icon img {
+            width: 32px;
+            height: 32px;
+            transition: var(--transition);
+            filter: brightness(0) saturate(100%) invert(100%);
+        }
 
-    .search-section {
-      padding: 20px 25px;
-      background: rgba(32, 58, 67, 0.8);
-      border-radius: var(--border-radius-md);
-      margin: 25px auto;
-      max-width: 650px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-    }
+        .top-bar .icon:hover img {
+            transform: scale(1.1) rotate(5deg);
+            filter: brightness(0) saturate(100%) invert(63%) sepia(58%) saturate(2834%) hue-rotate(79deg) brightness(119%) contrast(119%);
+        }
 
-    .search-container {
-      display: flex;
-      gap: 12px;
-      max-width: 550px;
-      margin: 0 auto;
-    }
+        .top-bar .icon span {
+            font-size: 10px;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
 
-    .search-container input {
-      flex: 1;
-      padding: 14px 18px;
-      border: 2px solid var(--primary-green);
-      border-radius: var(--border-radius-sm);
-      background-color: rgba(34, 34, 34, 0.95);
-      color: var(--text-color);
-      font-size: 18px;
-      outline: none;
-      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-    }
+        /* سلايدر محسن */
+        .slider-container {
+            width: 100%;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
 
-    .search-container input::placeholder {
-      color: var(--light-gray-text);
-      opacity: 0.9;
-    }
+        .slider-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 255, 127, 0.3);
+        }
 
-    .search-container input:focus {
-      border-color: #32e16d;
-      box-shadow: 0 0 12px rgba(0, 255, 127, 0.8);
-    }
+        .slider-container img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: var(--transition);
+        }
 
-    .search-container button {
-      padding: 14px 25px;
-      background-color: var(--primary-green);
-      color: #050505;
-      border: none;
-      border-radius: var(--border-radius-sm);
-      cursor: pointer;
-      font-size: 19px;
-      font-weight: bold;
-      transition: background-color var(--transition-speed), transform 0.2s ease, box-shadow var(--transition-speed);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
+        .slider-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px;
+            color: white;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
 
-    .search-container button:hover {
-      background-color: #32e16d;
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0, 255, 127, 0.5);
-    }
+        .slider-container:hover .slider-overlay {
+            transform: translateY(0);
+        }
 
-    .search-container button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
 
-    .tabs-nav {
-      padding: 18px 25px;
-      margin: 25px auto;
-      max-width: 850px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      border-radius: var(--border-radius-md);
-      background: rgba(32, 58, 67, 0.8);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-    }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+        }
 
-    .tabs-nav button, .tabs-nav a.button-link { /* إضافة .button-link */
-      flex: 1;
-      min-width: 130px;
-      max-width: 200px;
-      padding: 14px 18px;
-      background-color: var(--dark-card-bg);
-      color: var(--text-color);
-      border: 2px solid var(--primary-green);
-      border-radius: var(--border-radius-sm);
-      cursor: pointer;
-      font-size: 17px;
-      font-weight: 700;
-      transition: background-color var(--transition-speed), color var(--transition-speed), transform 0.2s ease, box-shadow var(--transition-speed);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-decoration: none; /* إزالة الخط السفلي للروابط */
-    }
+        .dot.active {
+            background: var(--accent-color);
+            transform: scale(1.2);
+        }
 
-    .tabs-nav button:hover,
-    .tabs-nav button.active,
-    .tabs-nav a.button-link:hover,
-    .tabs-nav a.button-link.active { /* Added .button-link.active */
-      background-color: var(--primary-green);
-      color: #050505;
-      transform: translateY(-4px);
-      box-shadow: 0 8px 18px rgba(0, 255, 127, 0.5);
-    }
+        /* الشبكة الرئيسية */
+        .content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-    .tabs-nav button:active,
-    .tabs-nav a.button-link:active { /* إضافة .button-link:active */
-      transform: translateY(0);
-    }
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 20px 15px;
+            box-shadow: var(--glass-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .mods-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
-      padding: 25px;
-      justify-content: center;
-      margin: 0 auto;
-      max-width: 1200px;
-      flex-grow: 1;
-    }
+        .glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
 
-    .mod-card {
-      position: relative;
-      background-color: var(--dark-card-bg);
-      padding: 20px;
-      border: 2px solid var(--primary-green);
-      border-radius: var(--border-radius-md);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+        .glass:hover::before {
+            opacity: 0.1;
+        }
 
-    .mod-card:hover {
-      background-color: rgba(51, 51, 51, 0.95);
-      transform: translateY(-8px) scale(1.03);
-      box-shadow: var(--box-shadow-green-glow);
-    }
+        .glass:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 255, 127, 0.4);
+        }
 
-    .mod-number {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--primary-green);
-      color: #050505;
-      font-size: 14px;
-      font-weight: 900;
-      padding: 5px 10px;
-      border-radius: var(--border-radius-sm);
-      z-index: 10;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-    }
+        .glass:nth-child(even):hover::before {
+            background: var(--secondary-gradient);
+        }
 
-    .image-wrapper {
-      width: 100%;
-      height: 180px;
-      overflow: hidden;
-      margin-bottom: 15px;
-      border-radius: var(--border-radius-sm);
-      border: 1px solid rgba(0, 255, 127, 0.5);
-      background-color: #1a1a1a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .glass .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            transition: var(--transition);
+        }
 
-    .mod-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
+        .glass:hover .icon-wrapper {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotateY(180deg);
+        }
 
-    .mod-card:hover .mod-image {
-      transform: scale(1.1);
-    }
+        .glass img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
 
-    .mod-details {
-      flex-grow: 1;
-      text-align: right;
-      margin-bottom: 12px;
-    }
+        .glass p {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
 
-    .mod-name {
-      font-size: 20px;
-      color: var(--primary-green);
-      font-weight: 700;
-      margin-bottom: 8px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      direction: rtl;
-    }
+        .glass:hover p {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
 
-    .mod-version {
-      font-size: 15px;
-      color: var(--light-gray-text);
-      margin-bottom: 12px;
-      direction: rtl;
-    }
+        /* الأزرار الكبيرة المحسنة */
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
 
-    .download-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 90%;
-      margin: 12px auto 0;
-      padding: 12px;
-      background-color: #32e16d;
-      color: #050505;
-      border: none;
-      border-radius: var(--border-radius-sm);
-      cursor: pointer;
-      font-size: 17px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background-color var(--transition-speed), transform 0.2s ease, box-shadow var(--transition-speed);
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    }
+        .big-button {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 0 25px;
+            box-shadow: var(--glass-shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .download-btn i {
-      font-size: 20px;
-    }
+        .big-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--success-gradient);
+            opacity: 0.1;
+            transition: var(--transition);
+        }
 
-    .download-btn:hover {
-      background-color: #2ac75e;
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-    }
+        .big-button:hover::before {
+            left: 0;
+        }
 
-    .download-btn:active {
-      transform: translateY(0);
-    }
+        .big-button:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 35px rgba(0, 255, 127, 0.4);
+        }
 
-    .no-mods-message, .error-message {
-      font-size: 20px;
-      color: var(--light-gray-text);
-      margin-top: 40px;
-      padding: 20px;
-      background-color: rgba(34, 34, 34, 0.7);
-      border-radius: var(--border-radius-md);
-      border: 2px solid rgba(0, 255, 127, 0.5);
-      max-width: 600px;
-      margin: 40px auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-    .error-message {
-      color: #ff6347;
-      border-color: #ff6347;
-    }
+        .big-button .button-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-left: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .loader-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--dark-overlay-bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
+        .big-button:hover .button-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
 
-    .loader-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
+        .big-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
 
-    .loader {
-      border: 10px solid rgba(243, 243, 243, 0.2);
-      border-top: 10px solid var(--primary-green);
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
-      animation: spin 1s linear infinite;
-      box-shadow: 0 0 20px rgba(0, 255, 127, 0.8);
-    }
+        .big-button p {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            transition: var(--transition);
+        }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+        .big-button:hover p {
+            color: var(--accent-color);
+        }
 
-    .footer {
-      background: rgba(15, 32, 39, 0.95);
-      padding: 25px 0;
-      margin-top: 40px;
-      border-top: 3px solid var(--primary-green);
-      box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.4);
-      color: var(--light-gray-text);
-      font-size: 16px;
-    }
+        /* قسم الإحصائيات */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-    .footer-content {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--glass-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
 
-    .footer-links a {
-      color: var(--primary-green);
-      text-decoration: none;
-      margin: 0 12px;
-      transition: color var(--transition-speed), text-shadow var(--transition-speed);
-    }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 255, 127, 0.3);
+        }
 
-    .footer-links a:hover {
-      color: #32e16d;
-      text-decoration: underline;
-      text-shadow: 0 0 5px rgba(0, 255, 127, 0.5);
-    }
+        .stat-number {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
 
-    .social-icons a {
-      color: var(--text-color);
-      font-size: 26px;
-      margin: 0 12px;
-      transition: color var(--transition-speed), transform 0.2s ease;
-    }
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
 
-    .social-icons a:hover {
-      color: var(--primary-green);
-      transform: translateY(-2px);
-    }
+        /* قسم الأخبار السريعة */
+        .news-ticker {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
 
-    @media (max-width: 380px) {
-      .header-content { padding: 0 10px; }
-      .logo img { height: 30px; }
-      .logo-text { font-size: 18px; letter-spacing: 0.5px; }
-      .welcome-box { font-size: 14px; padding: 10px; min-height: 70px; }
-      .search-container input { font-size: 14px; padding: 10px 12px; }
-      .search-container button { font-size: 14px; padding: 10px 15px; gap: 4px; }
-      .tabs-nav { gap: 8px; padding: 10px; }
-      .tabs-nav button, .tabs-nav a.button-link { font-size: 13px; padding: 10px; gap: 6px; min-width: unset; flex-basis: 48%; }
-      .mods-grid { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
-      .mod-card { padding: 10px; }
-      .mod-number { font-size: 11px; padding: 3px 6px; top: 8px; left: 8px; }
-      .image-wrapper { height: 120px; margin-bottom: 8px; }
-      .mod-name { font-size: 15px; margin-bottom: 4px; }
-      .mod-version { font-size: 12px; margin-bottom: 8px; }
-      .download-btn { font-size: 13px; padding: 8px; gap: 6px; }
-      .download-btn i { font-size: 16px; }
-      .footer { padding: 15px 0; font-size: 13px; }
-      .footer-links a, .social-icons a { font-size: 20px; margin: 0 8px; }
-      .no-mods-message, .error-message { font-size: 16px; padding: 15px; }
-    }
+        .news-content {
+            white-space: nowrap;
+            animation: scroll-right 20s linear infinite;
+        }
 
-    @media (min-width: 381px) and (max-width: 600px) {
-      .header-content { padding: 0 15px; }
-      .logo img { height: 40px; }
-      .logo-text { font-size: 24px; }
-      .welcome-box { font-size: 16px; padding: 15px; min-height: 80px; }
-      .search-container input { font-size: 15px; padding: 12px 15px; }
-      .search-container button { font-size: 15px; padding: 12px 18px; }
-      .tabs-nav { gap: 10px; padding: 15px; }
-      .tabs-nav button, .tabs-nav a.button-link { font-size: 14px; padding: 12px; min-width: unset; flex-basis: 48%; }
-      .mods-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding: 15px; }
-      .mod-card { padding: 12px; }
-      .mod-number { font-size: 12px; padding: 4px 8px; }
-      .image-wrapper { height: 140px; margin-bottom: 10px; }
-      .mod-name { font-size: 16px; margin-bottom: 6px; }
-      .mod-version { font-size: 13px; margin-bottom: 10px; }
-      .download-btn { font-size: 14px; padding: 9px; }
-      .download-btn i { font-size: 18px; }
-      .footer { padding: 20px 0; font-size: 14px; }
-      .footer-links a, .social-icons a { font-size: 22px; margin: 0 10px; }
-      .no-mods-message, .error-message { font-size: 18px; padding: 18px; }
-    }
+        @keyframes scroll-right {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
 
-    @media (min-width: 601px) and (max-width: 900px) {
-      .header-content { padding: 0 20px; }
-      .logo img { height: 45px; }
-      .logo-text { font-size: 28px; }
-      .welcome-box { font-size: 20px; padding: 20px; min-height: 85px; }
-      .search-container input { font-size: 17px; padding: 13px 16px; }
-      .search-container button { font-size: 17px; padding: 13px 22px; }
-      .tabs-nav { gap: 12px; padding: 15px 20px; }
-      .tabs-nav button, .tabs-nav a.button-link { font-size: 16px; padding: 13px 16px; min-width: 110px; }
-      .mods-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 20px; }
-      .mod-card { padding: 18px; }
-      .mod-number { font-size: 13px; padding: 4px 9px; }
-      .image-wrapper { height: 160px; margin-bottom: 12px; }
-      .mod-name { font-size: 18px; margin-bottom: 7px; }
-      .mod-version { font-size: 14px; margin-bottom: 11px; }
-      .download-btn { font-size: 16px; padding: 11px; }
-      .download-btn i { font-size: 19px; }
-      .footer { padding: 22px 0; font-size: 15px; }
-      .footer-links a, .social-icons a { font-size: 24px; margin: 0 10px; }
-      .no-mods-message, .error-message { font-size: 19px; padding: 20px; }
-    }
+        /* شريط التنقل السفلي */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+            height: 70px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            border-radius: 35px;
+            box-shadow: var(--glass-shadow);
+            z-index: 1000;
+        }
 
-    @media (min-width: 901px) {
-      /* No changes needed here */
-    }
-  </style>
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 20px;
+            transition: var(--transition);
+            cursor: pointer;
+            min-width: 50px;
+        }
 
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics-compat.js" defer></script>
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(0, 255, 127, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover i,
+        .nav-item.active i {
+            color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        .nav-item span {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        /* تأثيرات الحركة */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* تحسينات الاستجابة */
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 15px;
+            }
+            
+            .content {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+            
+            .glass {
+                padding: 15px 10px;
+            }
+            
+            .big-button {
+                height: 70px;
+                padding: 0 20px;
+            }
+            
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .top-bar {
+                padding: 10px 15px;
+            }
+            
+            .top-bar .icon img {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .content {
+                gap: 10px;
+            }
+            
+            .glass {
+                padding: 12px 8px;
+            }
+        }
+
+        /* مؤثرات بصرية إضافية */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* تحسينات إضافية للتفاعل */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* لودر مخصص */
+        .loader {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-
-  <div id="loader" class="loader-overlay flex-center">
-    <div class="loader"></div>
-    <p class="sr-only">جاري تحميل المحتوى...</p>
-  </div>
-
-  <header class="header">
-    <div class="container header-content">
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="welcome-section">
-      <div class="welcome-box glass-effect" id="welcomeBox">
-        <span class="sr-only">رسالة ترحيبية:</span>
-        أهلاً وسهلاً بكم في تطبيق عراق كرافت، التطبيق العراقي للمودات في ماين كرافت!
-      </div>
-    </section>
-
-    <section class="search-section glass-effect">
-      <h2 class="sr-only">قسم البحث</h2>
-      <div class="search-container">
-        <input type="text" id="searchInput" placeholder="ابحث عن مود أو رقم..." aria-label="حقل البحث عن المودات">
-        <button id="searchBtn" aria-label="زر البحث">
-          <i class="fas fa-search"></i>
-          <span>بحث</span>
-        </button>
-      </div>
-    </section>
-
-    <nav class="tabs-nav glass-effect" aria-label="فئات المودات">
-      <a href="go:Mod1" class="button-link active" id="tabMods" data-category="mods">
-        <i class="fas fa-hammer"></i>
-        <span>مودات</span>
-      </a>
-      <a href="peg.3.html" class="button-link" id="tabResourcePacks">
-        <i class="fas fa-box-open"></i>
-        <span>ريسورس باك</span>
-      </a>
-      <a href="peg.1.html" class="button-link" id="tabWorlds">
-        <i class="fas fa-globe"></i>
-        <span>عوالم</span>
-      </a>
-      <a href="peg.2.html" class="button-link" id="tabVersions">
-        <i class="fas fa-robot"></i>
-        <span>قنوات</span>
-      </a>
-    </nav>
-
-    <section class="mods-grid" id="modsContainer" aria-live="polite">
-      </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-content">
-      <p>2025©  جميع الحقوق محفوظة. لدى منصة عراق كرافت</p>
-      <div class="footer-links">
+    <div class="app-container">
+        <div class="top-bar slide-up">
+            <div class="icon ripple" title="الإشعارات" onclick="handleNavigation('http://action_notifications')">
+                <img src="https://cdn-icons-png.flaticon.com/128/1827/1827392.png" alt="إشعارات">
+                <span>إشعارات</span>
+            </div>
+            <div class="icon ripple" title="مشاركة" onclick="handleNavigation('http://action_share')">
+                <img src="https://cdn-icons-png.flaticon.com/128/929/929610.png" alt="مشاركة">
+                <span>مشاركة</span>
+            </div>
+            <div class="icon ripple" title="سباق" onclick="handleNavigation('go:x1')">
+                <img src="https://cdn.iconscout.com/icon/free/png-512/free-ranking-3751389-3129846.png" alt="سباق">
+                <span>سباق</span>
+            </div>
+            <div class="icon ripple" title="ايميل" onclick="handleNavigation('go:MT')">
+                <img src="https://cdn-icons-png.flaticon.com/128/3916/3916611.png" alt="ايميل">
+                <span>تواصل</span>
+            </div>
         </div>
-      <div class="social-icons">
-        <a href="https://www.tiktok.com/@HKOMHSF" target="_blank" rel="noopener noreferrer" aria-label="حسابنا على تيك توك">
-          <i class="fab fa-tiktok"></i>
-        </a>
-        <a href="https://t.me/HKOMHSF" target="_blank" rel="noopener noreferrer" aria-label="قناتنا على تليجرام">
-          <i class="fab fa-telegram-plane"></i>
-        </a>
-        <a href="https://www.youtube.com/@hkomhsf" target="_blank" rel="noopener noreferrer" aria-label="قناتنا على يوتيوب">
-          <i class="fab fa-youtube"></i>
-        </a>
-      </div>
+        <div class="news-ticker">
+            <div class="news-content">
+                🔥 آخر التحديثات: تطبيقات جديدة • عروض حصرية • محتوى حصري للمشتركين
+            </div>
+        </div>
+
+        <div class="slider-container floating" id="slider-container" onclick="window.location.href='عروض_حصرية.html'">
+            <img id="sliderImage" src="https://h.top4top.io/p_34302yen01.jpg" alt="صورة متحركة">
+            <div class="slider-overlay">
+                <h3 id="sliderTitle">ريلم ماين كرافت</h3>
+                <p id="sliderDescription"> احصل على ريلم بانسب الاسعار</p>
+            </div>
+        </div>
+
+        <div class="slider-dots">
+            <div class="dot active" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+        </div>
+
+        <div class="content">
+            <div class="glass ripple" onclick="window.location.href='مودات.html'">
+                <div class="icon-wrapper">
+                    <img src="https://j.top4top.io/p_3414dyzkl1.jpg" alt="مودات">
+                </div>
+                <p>مودات</p>
+            </div>
+            <div class="glass ripple" onclick="window.location.href='شات.html'">
+                <div class="icon-wrapper">
+                    <img src="https://k.top4top.io/p_3414emda71.jpg" alt="شات">
+                </div>
+                <p>شات</p>
+            </div>
+            <div class="glass ripple" onclick="window.location.href='متجر.html'">
+                <div class="icon-wrapper">
+                    <img src="https://b.top4top.io/p_3379c5fjs0.png" alt="متجر">
+                </div>
+                <p>متجر</p>
+            </div>
+            <div class="glass ripple" onclick="window.location.href='رفع_مود.html'">
+                <div class="icon-wrapper">
+                    <img src="https://h.top4top.io/p_3499qrj5u1.jpg" alt="رفع مود">
+                </div>
+                <p>رفع مود</p>
+            </div>
+            <div class="glass ripple" onclick="window.location.href='سيرفرات.html'">
+                <div class="icon-wrapper">
+                    <img src="https://l.top4top.io/p_34140vd101.jpg" alt="سيرفرات">
+                </div>
+                <p>سيرفرات</p>
+            </div>
+            <div class="glass ripple" onclick="window.location.href='المشتركين.html'">
+                <div class="icon-wrapper">
+                    <img src="https://c.top4top.io/p_3421480t91.jpg" alt="المشتركين">
+                </div>
+                <p>المشتركين</p>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <div class="big-button ripple" onclick="window.location.href='اضافات.html'">
+                <div class="button-icon">
+                    <img src="https://b.top4top.io/p_3414jzd5h1.jpg" alt="اضافات">
+                </div>
+                <p>اضافات</p>
+            </div>
+            <div class="big-button ripple" onclick="window.location.href='بناء.html'">
+                <div class="button-icon">
+                    <img src="https://e.top4top.io/p_3456v7q5e1.jpg" alt="بناء">
+                </div>
+                <p>بناء</p>
+            </div>
+
+        </div>
+
+        <div class="stats-section">
+
+            <div class="stat-card pulse" style="animation-delay: 0.2s;">
+                <div class="stat-number" id="downloadCount">21.5K</div>
+                <div class="stat-label">إجمالي التحميلات</div>
+            </div>
+        </div>
+
+        <div class="loader" id="loader"></div>
     </div>
-  </footer>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const firebaseConfig = {
-    apiKey: "AIzaSyBmvJQp14pjEb_VOpSjsATLro4hk6oIB6M",
-  authDomain: "reso80.firebaseapp.com",
-  projectId: "reso80",
-  storageBucket: "reso80.firebasestorage.app",
-  messagingSenderId: "392890635009",
-  appId: "1:392890635009:web:abd6cf9636da139806c100",
-  measurementId: "G-BH1CCQS8ZN"
-        };
-
-        let db;
-
-        try {
-          if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            if (firebase.analytics) {
-              firebase.analytics();
-            }
-          }
-          db = firebase.database();
-        } catch (e) {
-          console.error("فشل تهيئة Firebase:", e);
-          document.getElementById('loader')?.classList.add('hidden');
-          document.getElementById('modsContainer').innerHTML = "<p class='error-message'>تعذر تحميل التطبيق. يرجى التحقق من اتصالك بالإنترنت وتكوين Firebase.</p>";
-          return;
+    <script>
+        // دالة التنقل الخاصة بالشريط العلوي فقط
+        function handleNavigation(url) {
+            showLoader();
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1000);
         }
 
-        const welcomeBox = document.getElementById('welcomeBox');
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const modsContainer = document.getElementById('modsContainer');
-        const loader = document.getElementById('loader');
-        const tabModsButton = document.getElementById('tabMods'); 
-        const allTabButtons = document.querySelectorAll('.tabs-nav button, .tabs-nav a.button-link'); // Select all tab buttons/links
-
-        let allModsData = []; 
-
-        const welcomeMessages = [
-          "أهلاً وسهلاً بكم في تطبيق عراق كرافت، التطبيق العراقي للمودات في ماين كرافت!",
-          "تابعنا على تيك توك: HKOMHSF",
-          "انضم إلى قناتنا على تليجرام: HKOMHSF",
-          "شاهد شروحات التركيب على يوتيوب: حكومة SF"
+        // بيانات السلايدر المحسنة
+        const sliderData = [
+            {
+                src: "https://h.top4top.io/p_34302yen01.jpg",
+                link: "عروض_حصرية.html",
+                title: "عروض حصرية",
+                description: "اكتشف أحدث العروض والتطبيقات"
+            },
+            {
+                src: "https://d.top4top.io/p_34308rdax1.jpg",
+                link: "تحديثات_جديدة.html",
+                title: "تحديثات جديدة",
+                description: "آخر التحديثات والميزات الجديدة"
+            }
         ];
-        let welcomeMessageIndex = 0; 
-        const startWelcomeMessageRotation = () => {
-          setInterval(() => {
-            welcomeMessageIndex = (welcomeMessageIndex + 1) % welcomeMessages.length;
-            welcomeBox.textContent = welcomeMessages[welcomeMessageIndex];
-          }, 5000);
-        };
-        startWelcomeMessageRotation();
 
+        let currentSlideIndex = 0;
+        const slider = document.getElementById("sliderImage");
+        const sliderTitle = document.getElementById("sliderTitle");
+        const sliderDescription = document.getElementById("sliderDescription");
+        const dots = document.querySelectorAll('.dot');
 
-        const applyFiltersAndSearch = () => {
-          const query = searchInput.value.trim().toLowerCase();
-          // The active category for filtering is now determined by the currently active tab if needed,
-          // but since "مودات" is now a link and defaults to 'mods', we can keep it as 'mods' for the content display.
-          const activeCategory = 'mods'; 
+        // تحديث السلايدر
+        function updateSlider(index) {
+            const currentSlide = sliderData[index];
+            
+            slider.style.opacity = 0;
+            
+            setTimeout(() => {
+                slider.src = currentSlide.src;
+                sliderTitle.textContent = currentSlide.title;
+                sliderDescription.textContent = currentSlide.description;
+                slider.style.opacity = 1;
+                
+                // تحديث النقاط
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }, 300);
+        }
 
-          let filteredMods = allModsData.filter(mod => {
-            return mod.category === activeCategory;
-          });
+        // الانتقال للشريحة التالية
+        function nextSlide() {
+            currentSlideIndex = (currentSlideIndex + 1) % sliderData.length;
+            updateSlider(currentSlideIndex);
+        }
 
-          // نطبق البحث على المودات المفلترة
-          const finalFilteredMods = filteredMods.filter(mod => {
-            const name = mod.name?.toLowerCase() || '';
-            // البحث عن طريق الرقم المخزن في Firebase
-            const number = mod.number !== null && mod.number !== undefined ? String(mod.number).toLowerCase() : '';
-            return name.includes(query) || number.includes(query) || query === "";
-          });
+        // الانتقال لشريحة محددة
+        function goToSlide(index) {
+            currentSlideIndex = index;
+            updateSlider(currentSlideIndex);
+        }
 
-          displayMods(finalFilteredMods);
-        };
+        // التعامل مع النقر على السلايدر
+        function handleSliderClick() {
+            showLoader();
+            setTimeout(() => {
+                window.location.href = sliderData[currentSlideIndex].link;
+            }, 800);
+        }
 
-        searchBtn.addEventListener("click", applyFiltersAndSearch);
-        searchInput.addEventListener("input", applyFiltersAndSearch);
+        // إظهار اللودر
+        function showLoader() {
+            document.getElementById('loader').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+            }, 2000);
+        }
 
-        // This listener will handle adding the 'active' class to the clicked tab/link.
-        // The navigation for 'go:A' is handled directly by the href attribute on the <a> tag.
-        allTabButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                allTabButtons.forEach(btn => btn.classList.remove('active'));
-                event.currentTarget.classList.add('active');
-                // If the clicked tab is 'Mods', re-apply the filter to show 'mods' category
-                // This ensures the display remains consistent even if a link changes the URL
-                if (event.currentTarget.id === 'tabMods') {
-                    applyFiltersAndSearch(); 
+        // تحديث شريط التنقل
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        // رسالة قريباً
+        function showComingSoon() {
+            alert('هذه الميزة ستكون متاحة قريباً! 🚀');
+        }
+
+        // تحديث الإحصائيات بشكل ديناميكي
+        function updateStats() {
+            const userCountElement = document.getElementById('userCount');
+            const downloadCountElement = document.getElementById('downloadCount');
+            
+            // محاكاة تحديث الأرقام
+            let userCount = 2500;
+            let downloadCount = 15800;
+            
+            const userIncrement = Math.floor(Math.random() * 10) + 1;
+            const downloadIncrement = Math.floor(Math.random() * 50) + 10;
+            
+            userCount += userIncrement;
+            downloadCount += downloadIncrement;
+            
+            // تنسيق الأرقام
+            if (userCountElement) userCountElement.textContent = formatNumber(userCount);
+            if (downloadCountElement) downloadCountElement.textContent = formatNumber(downloadCount);
+        }
+
+        // تنسيق الأرقام
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // تأثير الضغط على الأزرار
+        function addRippleEffect(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple-effect');
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // تحسينات الأداء والتفاعل
+        function initializeApp() {
+            // تحديث الوقت كل ثانية
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // تحديث السلايدر كل 5 ثوانٍ
+            setInterval(nextSlide, 5000);
+            
+            // تحديث الإحصائيات كل 30 ثانية
+            setInterval(updateStats, 30000);
+            
+            // إضافة تأثيرات التفاعل
+            document.querySelectorAll('.ripple').forEach(element => {
+                element.addEventListener('click', addRippleEffect);
+            });
+            
+            // تأثير التمرير السلس
+            document.addEventListener('scroll', handleScroll);
+            
+            // تحسين الأداء للأجهزة المحمولة
+            if (window.innerWidth <= 768) {
+                optimizeForMobile();
+            }
+        }
+
+        // تحسينات للأجهزة المحمولة
+        function optimizeForMobile() {
+            // تقليل تأثيرات الحركة للأجهزة الضعيفة
+            const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (mediaQuery.matches) {
+                document.body.classList.add('reduced-motion');
+            }
+            
+            // تحسين استجابة اللمس
+            document.addEventListener('touchstart', function() {}, { passive: true });
+        }
+
+        // التعامل مع التمرير
+        function handleScroll() {
+            const scrollY = window.scrollY;
+            const elements = document.querySelectorAll('.fade-in, .slide-up');
+            
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
                 }
             });
+        }
+
+        // إضافة حدث لتحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            
+            // تأثير ظهور العناصر تدريجياً
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach((element, index) => {
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            }, 200);
         });
 
-        // Ensure "مودات" tab is active on initial load
-        tabModsButton.classList.add('active');
-
-        // *** دالة جديدة لإضافة مود برقم تسلسلي تلقائي (مثال توضيحي) ***
-        // هذه الدالة لا يتم استدعاؤها تلقائياً في التطبيق، ولكنها توضح كيفية إضافة مود جديد
-        // مع توليد رقم تسلسلي وحفظه في Firebase.
-        async function addModWithAutoNumber(modDetails) {
-            try {
-                // جلب جميع المودات للعثور على أكبر رقم موجود
-                const snapshot = await db.ref("mods").once("value");
-                const modsObject = snapshot.val();
-                let maxNumber = 0;
-
-                if (modsObject) {
-                    Object.values(modsObject).forEach(mod => {
-                        if (typeof mod.number === 'number' && !isNaN(mod.number)) {
-                            maxNumber = Math.max(maxNumber, mod.number);
-                        }
-                    });
-                }
-                
-                const newModNumber = maxNumber + 1;
-                
-                // إضافة الرقم الجديد إلى تفاصيل المود
-                const newModData = { ...modDetails, number: newModNumber };
-
-                // إضافة المود إلى Firebase
-                const newModRef = db.ref("mods").push();
-                await newModRef.set(newModData);
-                console.log(`تم إضافة المود بنجاح بالرقم: ${newModNumber}`);
-                fetchMods(); // إعادة جلب وعرض المودات بعد الإضافة
-            } catch (error) {
-                console.error("خطأ في إضافة المود:", error);
-            }
+        // إضافة تأثيرات الصوت (اختيارية)
+        function playClickSound() {
+            // يمكن إضافة ملفات صوتية للتفاعل
+            const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTq66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmzhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCjiS1/LNeSsFJHfH8N2QQAoUXrabcdefdddbcfddcdefdddefddefdddefdd');
+            audio.volume = 0.1;
+            audio.play().catch(() => {}); // تجاهل الأخطاء
         }
 
-        // مثال على كيفية استدعاء addModWithAutoNumber (يمكنك تشغيله من الكونسول لتجربة)
-        // addModWithAutoNumber({
-        //     name: "مود رعب جديد",
-        //     version: "1.20.1",
-        //     image: "https://via.placeholder.com/280x180?text=New+Horror+Mod",
-        //     link: "https://example.com/new-horror-mod.mcpack",
-        //     category: "mods"
-        // });
-
-
-        // جلب المودات من Firebase
-        const fetchMods = async () => {
-          loader.classList.remove('hidden');
-
-          try {
-            const snapshot = await db.ref("mods").once("value");
-
-            if (!snapshot.exists()) {
-              modsContainer.innerHTML = "<p class='no-mods-message'>لا توجد مودات حالياً. يرجى التحقق لاحقاً!</p>";
-              allModsData = [];
-              return;
+        // إضافة اختصارات لوحة المفاتيح
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowLeft':
+                    goToSlide((currentSlideIndex - 1 + sliderData.length) % sliderData.length);
+                    break;
+                case 'ArrowRight':
+                    goToSlide((currentSlideIndex + 1) % sliderData.length);
+                    break;
+                case 'Enter':
+                    if (event.target.classList.contains('glass') || event.target.classList.contains('big-button')) {
+                        window.location.href = event.target.getAttribute('onclick').replace("window.location.href='", "").replace("'", "");
+                    }
+                    break;
             }
+        });
 
-            const modsObject = snapshot.val();
-            const loadedMods = [];
+        // تحسين تجربة المستخدم
+        function enhanceUserExperience() {
+            // إضافة تأثير التحميل للصور
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('load', function() {
+                    this.style.opacity = '1';
+                });
+                
+                img.addEventListener('error', function() {
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIxIDJIMTAgVjlIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWMlpIMTBIMjFWcGF0aCBkPSJNMTAgMTBWMTdIMjFWMTBIMTBaIiBmaWxsPSIjNTU1NTU1Ii8+CjxwYXRoIGQ9Ik0yIDJIMTBWOUgyVjJaIiBmaWxsPSIjNzc3Nzc3Ii8+CjxwYXRoIGQ9Ik0yIDEwVjE3SDEwVjEwSDJaIiBmaWxsPSIjOTk5OTk5Ii8+Cjwvc3ZnPgo=';
+                });
+            });
+            
+            // إضافة مؤشر التحميل للروابط
+            const links = document.querySelectorAll('.top-bar .icon');
+            links.forEach(link => {
+                link.addEventListener('click', function() {
+                    playClickSound();
+                });
+            });
+        }
 
-            Object.keys(modsObject).forEach(key => {
-                const modData = modsObject[key];
-                // التأكد من أن modData.number رقم صالح، وإلا يتم تعيينه إلى null
-                const modNumber = typeof modData.number === 'number' && !isNaN(modData.number) ? modData.number : null;
+        // تنفيذ التحسينات عند تحميل الصفحة
+        window.addEventListener('load', function() {
+            enhanceUserExperience();
+            
+            // إخفاء شاشة التحميل إن وُجدت
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.display = 'none';
+            }
+        });
 
-                if (typeof modData === 'object' && modData !== null && modData.name && modData.link && modData.image && modData.version) {
-                    loadedMods.push({
-                        id: key,
-                        name: modData.name,
-                        version: modData.version,
-                        image: modData.image,
-                        link: modData.link,
-                        number: modNumber, // استخدام الرقم الذي تم التحقق منه
-                        category: modData.category || 'mods' 
-                    });
-                } else {
-                    console.warn(`تخطي بيانات مود غير صالحة تحت المفتاح: ${key}`, modData);
+        // إضافة تأثيرات CSS للحركة المُحسنة
+        const additionalStyles = `
+            .reduced-motion * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .ripple-effect {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                pointer-events: none;
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
                 }
-            });
-
-            // فرز المودات بناءً على حقل 'number'
-            // المودات التي ليس لها رقم (null) ستوضع في النهاية
-            loadedMods.sort((a, b) => {
-                // إذا كان أي من الرقمين null، فتعامله على أنه لا نهاية (ليتم وضعه في النهاية)
-                const numA = a.number === null ? Infinity : a.number;
-                const numB = b.number === null ? Infinity : b.number;
-                return numA - numB;
-            });
-
-            allModsData = loadedMods; 
-            applyFiltersAndSearch(); 
-
-          } catch (error) {
-            console.error("خطأ في جلب المودات من Firebase:", error);
-            modsContainer.innerHTML = `<p class='error-message'>حدث خطأ أثناء تحميل المودات: ${error.message}. يرجى المحاولة مرة أخرى.</p>`;
-          } finally {
-            loader.classList.add('hidden');
-          }
-        };
-
-        // وظيفة عرض المودات
-        const displayMods = (modsToDisplay) => {
-          modsContainer.innerHTML = '';
-
-          if (modsToDisplay.length === 0) {
-            modsContainer.innerHTML = "<p class='no-mods-message'>لا توجد مودات مطابقة لمعايير البحث في هذه الفئة.</p>";
-            return;
-          }
-
-          modsToDisplay.forEach((mod) => { 
-            const modDiv = document.createElement("div");
-            modDiv.className = "mod-card glass-effect";
-            modDiv.setAttribute("data-name", mod.name || '');
-            modDiv.setAttribute("data-version", mod.version || '');
-            // تأكد من أن الرقم المخزن في Firebase هو الذي يتم استخدامه للعرض وللبحث
-            modDiv.setAttribute("data-number", String(mod.number !== null ? mod.number : '')); 
-
-            const imageUrl = mod.image && mod.image.startsWith('http') ? mod.image : 'https://via.placeholder.com/280x180?text=No+Image';
-            const downloadLink = mod.link && mod.link.startsWith('http') ? mod.link : '#';
-            const isDownloadable = downloadLink !== '#';
-
-            modDiv.innerHTML = `
-              <div class="mod-number">#${mod.number !== null ? mod.number : 'N/A (تحديث رقم المود)'}</div> 
-              <div class="image-wrapper">
-                <img class="mod-image" src="${imageUrl}" alt="${mod.name || 'صورة المود'}" loading="lazy">
-              </div>
-              <div class="mod-details">
-                <h3 class="mod-name" title="${mod.name || 'اسم المود غير متوفر'}">${mod.name || 'اسم المود غير متوفر'}</h3>
-                <p class="mod-version">الإصدار: ${mod.version || 'غير محدد'}</p>
-              </div>
-              <a href="${downloadLink}" target="_blank" rel="noopener noreferrer" class="download-btn" ${!isDownloadable ? 'aria-disabled="true" title="رابط التحميل غير متوفر" style="opacity: 0.6; cursor: not-allowed;"' : ''} >
-                <i class="fas fa-download"></i>
-                <span>${isDownloadable ? 'تحميل المود' : 'لا يوجد رابط'}</span>
-              </a>
-            `;
-            modsContainer.appendChild(modDiv);
-          });
-        };
-
-        fetchMods();
-    });
-  </script>
+            }
+            
+            .glass::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+                transform: rotate(45deg);
+                transition: all 0.5s;
+                opacity: 0;
+            }
+            
+            .glass:hover::after {
+                top: -100%;
+                left: -100%;
+                opacity: 1;
+            }
+            
+            .typing-effect {
+                overflow: hidden;
+                border-right: .15em solid var(--accent-color);
+                white-space: nowrap;
+                margin: 0 auto;
+                letter-spacing: .15em;
+                animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            }
+            
+            @keyframes typing {
+                from { width: 0 }
+                to { width: 100% }
+            }
+            
+            @keyframes blink-caret {
+                from, to { border-color: transparent }
+                50% { border-color: var(--accent-color); }
+            }
+        `;
+        
+        // إضافة الأنماط الإضافية
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = additionalStyles;
+        document.head.appendChild(styleSheet);
+    </script>
 </body>
 </html>
